@@ -15,6 +15,7 @@
           <thead>
             <tr>
               <th>Route Name</th>
+              <th>Stop Name</th>
               <th>Arrival Time</th>
             </tr>
           </thead>
