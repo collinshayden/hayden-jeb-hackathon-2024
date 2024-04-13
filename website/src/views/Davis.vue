@@ -4,23 +4,23 @@
             <iframe src="https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19137?noui=true&page_embed=true"
                 width="100%" height="400px"></iframe>
 
-            <div v-if="arrivals.length">
+            <div v-if="arrivals.length" class="funtable-width">
                 <table class="fun-table">
                     <thead>
                         <tr>
-                            <th>Route Name</th>
                             <th>Stop Name</th>
+                            <th>Route Name</th>
                             <th>Arrival Time</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="stop in arrivals">
+                            <td>{{ stop.stop_title }}</td>
                             <td>
                                 <ul>
                                     <li v-for="time in stop.data" :key=time.unixTime style="list-style-type: none;">{{ route_names[time.route_id] }}</li>
                                 </ul>
                             </td>
-                            <td>{{ stop.stop_title }}</td>
                             <td>
                                 <ul>
                                     <li v-for="time in stop.data" :key=time.unixTime style="list-style-type: none;">{{ time.formattedTime }}</li>
@@ -121,9 +121,34 @@ export default {
                         data: data.data,
                     });
                 }
-                console.log(this.arrivals)
+                
             })
             .catch((error) => console.error("Error fetching arrival times:", error));
+        fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805757")
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === "success") {
+                    this.arrivals.push({
+                        stop_title: "UVM Medical Center",
+                        data: data.data,
+                    });
+                }
+                
+            })
+            .catch((error) => console.error("Error fetching arrival times:", error));
+        fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805655")
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === "success") {
+                    this.arrivals.push({
+                        stop_title: "UVM Waterman Building",
+                        data: data.data,
+                    });
+                }
+                
+            })
+            .catch((error) => console.error("Error fetching arrival times:", error));
+            805655
     },
     // methods: {
     //    getRouteName(routeId) {
@@ -143,7 +168,7 @@ export default {
 }
 
 html {
-    background-color: #b0cee8;
+    background-color: #323f4b;
 }
 
 p {
@@ -176,17 +201,17 @@ fun-table {
 .fun-table th,
 .fun-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 4px;
     text-align: left;
 }
 
 .fun-table th {
-    background-color: #f2f2f2;
+    background-color: #39506e;
     color: black;
 }
 
 .fun-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: #4c606a;
 }
 
 .fun-table tr:hover {
