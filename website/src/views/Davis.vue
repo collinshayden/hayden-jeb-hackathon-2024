@@ -1,11 +1,14 @@
 <template>
   <div class="davis">
     <div class="body">
-      <iframe
-        src="https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19137?noui=true&page_embed=true"
-        width="100%"
-        height="400px"
-      ></iframe>
+      <div v-for="(url, index) in mapUrls" :key="index">
+        <iframe
+          :src="url"
+          width="100%"
+          height="400px"
+          v-show="currentIndex === index"
+        ></iframe>
+      </div>
 
       <div v-if="arrivals.length" v-for="stop in arrivals">
         <h3>
@@ -93,10 +96,23 @@ export default {
         19144: "10-Williston Essex Combo",
         19145: "11-Airport",
       },
+      mapUrls: [
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19145?noui=true&page_embed=true",
+
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19137?noui=true&page_embed=true",
+        // Add more map URLs here
+      ],
+      currentMapUrl: "",
+      currentIndex: 0,
+      fadeIn: false,
     };
   },
   created() {
+    this.currentMapUrl = this.mapUrls[this.currentIndex];
+    this.rotateMaps();
+
     // Fetch arrival times
+
     fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805490")
       .then((response) => response.json())
       .then((data) => {
@@ -120,11 +136,13 @@ export default {
       })
       .catch((error) => console.error("Error fetching arrival times:", error));
   },
-  // methods: {
-  //    getRouteName(routeId) {
-  //      return this.routeNames[routeId] || "Unknown";
-  //    },
-  // },
+  methods: {
+    rotateMaps() {
+      setInterval(() => {
+        this.currentIndex = (this.currentIndex + 1) % this.mapUrls.length;
+      }, 5000); // Rotate every 30 seconds
+    },
+  },
 };
 </script>
 
@@ -159,6 +177,19 @@ td {
 
 th {
   background-color: #f2f2f2;
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>
 <style scoped>
