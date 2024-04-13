@@ -6,7 +6,7 @@
          width="100%"
          height="400px"
        ></iframe>
-       <div v-if="routeNames.length && arrivals.length">
+       <div v-if="arrivals.length">
          <table>
            <thead>
              <tr>
@@ -33,11 +33,9 @@
   data() {
      return {
        arrivals: [],
-       routeNames: {},
      };
   },
   created() {
-     
      // Fetch arrival times
      fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805757")
        .then((response) => response.json())
@@ -48,11 +46,11 @@
        })
        .catch((error) => console.error("Error fetching arrival times:", error));
   },
-  methods: {
-     getRouteName(routeId) {
-       return this.routeNames[routeId] || "Unknown";
-     },
-  },
+  // methods: {
+  //    getRouteName(routeId) {
+  //      return this.routeNames[routeId] || "Unknown";
+  //    },
+  // },
  };
  </script>
  
