@@ -1,38 +1,55 @@
 <template>
-    <div class="davis">
-        <div class="body">
-            <iframe src="https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19137?noui=true&page_embed=true"
-                width="100%" height="350px"></iframe>
-
-            <div v-if="arrivals.length" class="table-div">
-                <table class="fun-table">
-                    <thead>
-                        <tr>
-                            <th>Stop Name</th>
-                            <th>Route Name</th>
-                            <th>Arrival Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="stop in arrivals">
-                            <td>{{ stop.stop_title }}</td>
-                            <td>
-                                <ul>
-                                    <li v-for="time in stop.data" :key=time.unixTime style="list-style-type: none;">{{ route_names[time.route_id] }}</li>
-                                </ul>
-                            </td>
-                            <td>
-                                <ul>
-                                    <li v-for="time in stop.data" :key=time.unixTime style="list-style-type: none;">{{ time.formattedTime }}</li>
-                                </ul>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div v-else>Loading...</div>
-        </div>
+  <div class="davis">
+    <div class="body">
+      <div v-for="(url, index) in mapUrls" :key="index">
+        <iframe
+          :src="url"
+          width="100%"
+          height="400px"
+          v-show="currentIndex === index"
+        ></iframe>
+      </div>
+      <div v-if="arrivals.length" class="funtable-width">
+        <table class="fun-table">
+          <thead>
+            <tr>
+              <th>Stop Name</th>
+              <th>Route Name</th>
+              <th>Arrival Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="stop in arrivals">
+              <td>{{ stop.stop_title }}</td>
+              <td>
+                <ul>
+                  <li
+                    v-for="time in stop.data"
+                    :key="time.unixTime"
+                    style="list-style-type: none"
+                  >
+                    {{ route_names[time.route_id] }}
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li
+                    v-for="time in stop.data"
+                    :key="time.unixTime"
+                    style="list-style-type: none"
+                  >
+                    {{ time.formattedTime }}
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div v-else>Loading...</div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -97,9 +114,20 @@ export default {
                 19144: "10-Williston Essex Combo",
                 19145: "11-Airport",
             },
+            mapUrls: [
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19145?noui=true&page_embed=true",
+
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19137?noui=true&page_embed=true",
+        // Add more map URLs here
+      ],
+      currentMapUrl: "",
+      currentIndex: 0,
+      fadeIn: false,
         };
     },
     created() {
+        this.currentMapUrl = this.mapUrls[this.currentIndex];
+    this.rotateMaps();
         // Fetch arrival times
         fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805490")
             .then((response) => response.json())
@@ -121,7 +149,7 @@ export default {
                         data: data.data,
                     });
                 }
-                
+
             })
             .catch((error) => console.error("Error fetching arrival times:", error));
         fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805757")
@@ -133,7 +161,7 @@ export default {
                         data: data.data,
                     });
                 }
-                
+
             })
             .catch((error) => console.error("Error fetching arrival times:", error));
         fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805655")
@@ -145,11 +173,17 @@ export default {
                         data: data.data,
                     });
                 }
-                
+
             })
             .catch((error) => console.error("Error fetching arrival times:", error));
-            805655
+        },
+            methods: {
+    rotateMaps() {
+      setInterval(() => {
+        this.currentIndex = (this.currentIndex + 1) % this.mapUrls.length;
+      }, 5000); // Rotate every 30 seconds
     },
+  },
     // methods: {
     //    getRouteName(routeId) {
     //      return this.routeNames[routeId] || "Unknown";
@@ -169,27 +203,40 @@ export default {
 }
 
 html {
-    background-color: #323f4b;
+  background-color: #323f4b;
 }
 
 p {
-    font-size: 1.15em;
-    text-indent: 2em;
+  font-size: 1.15em;
+  text-indent: 2em;
 }
 
 table {
-    width: 100%;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
 }
 
 th,
 td {
-    border: 1px solid #ddd;
-    padding: 8px;
+  border: 1px solid #ddd;
+  padding: 8px;
 }
 
 th {
-    background-color: #f2f2f2;
+  background-color: #f2f2f2;
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 </style>
 <style scoped>
@@ -200,28 +247,28 @@ table-div {
     width: 100%;
 }
 fun-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: Arial, sans-serif;
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
 }
 
 .fun-table th,
 .fun-table td {
-    border: 1px solid #ddd;
-    padding: 4px;
-    text-align: left;
+  border: 1px solid #ddd;
+  padding: 4px;
+  text-align: left;
 }
 
 .fun-table th {
-    background-color: #39506e;
-    color: black;
+  background-color: #39506e;
+  color: black;
 }
 
 .fun-table tr:nth-child(even) {
-    background-color: #4c606a;
+  background-color: #4c606a;
 }
 
 .fun-table tr:hover {
-    background-color: #ddd;
+  background-color: #ddd;
 }
 </style>
