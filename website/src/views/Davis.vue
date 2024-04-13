@@ -184,6 +184,11 @@ export default {
       }, 5000); // Rotate every 30 seconds
     },
   },
+    // methods: {
+    //    getRouteName(routeId) {
+    //      return this.routeNames[routeId] || "Unknown";
+    //    },
+    // },
 };
 </script>
 
