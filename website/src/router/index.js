@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import Davis from '../views/Davis.vue'
-import LivingLearning from '../views/LivingLearning.vue'
+import Innovation from '../views/Innovation.vue'
 import Trinity from '../views/Trinity.vue'
 import NotFound from '../views/NotFound.vue'
 
@@ -24,9 +24,9 @@ const routes = [
     props: true,
   },
   {
-    path: '/livinglearning',
-    name: 'LivingLearning',
-    component: LivingLearning,
+    path: '/innovation',
+    name: 'Innovation',
+    component: Innovation,
     props: true,
   },
   // catchall 404

@@ -1,5 +1,5 @@
 <template>
-  <div class="davis">
+  <div class="Innovation">
     <div class="body">
       <div v-for="(url, index) in mapUrls" :key="index">
         <iframe
@@ -54,7 +54,7 @@
 
 <script>
 export default {
-    name: "davis",
+    name: "innovation",
     data() {
         return {
             arrivals: [],
@@ -119,6 +119,7 @@ export default {
 
         "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19137?noui=true&page_embed=true",
         // Add more map URLs here
+        //11, 8, 2, 36, 46, 56, 86, 1
       ],
       currentMapUrl: "",
       currentIndex: 0,
@@ -129,23 +130,35 @@ export default {
         this.currentMapUrl = this.mapUrls[this.currentIndex];
     this.rotateMaps();
         // Fetch arrival times
-        fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805490")
+        fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805655")
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === "success") {
                     this.arrivals.push({
-                        stop_title: "UHeights Towards Williston",
+                        stop_title: "UVM Waterman Building",
                         data: data.data,
                     });
                 }
             })
             .catch((error) => console.error("Error fetching arrival times:", error));
-        fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805531")
+        fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805488")
             .then((response) => response.json())
             .then((data) => {
                 if (data.status === "success") {
                     this.arrivals.push({
-                        stop_title: "UHeights Towards Downtown",
+                        stop_title: "Main St. at S. Prospect St. Towards S. Burlington",
+                        data: data.data,
+                    });
+                }
+
+            })
+            .catch((error) => console.error("Error fetching arrival times:", error));
+        fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805532")
+            .then((response) => response.json())
+            .then((data) => {
+                if (data.status === "success") {
+                    this.arrivals.push({
+                        stop_title: "Main St. at S. Prospect St. Towards Downtown",
                         data: data.data,
                     });
                 }
@@ -158,18 +171,6 @@ export default {
                 if (data.status === "success") {
                     this.arrivals.push({
                         stop_title: "UVM Medical Center",
-                        data: data.data,
-                    });
-                }
-
-            })
-            .catch((error) => console.error("Error fetching arrival times:", error));
-        fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805655")
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.status === "success") {
-                    this.arrivals.push({
-                        stop_title: "UVM Waterman Building",
                         data: data.data,
                     });
                 }

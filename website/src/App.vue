@@ -10,7 +10,7 @@
       </li>
       <li><div class="pipe">|</div></li>
       <li>
-        <router-link :to="{ name: 'LivingLearning' }">Living/Learning</router-link>
+        <router-link :to="{ name: 'Innovation' }">Innovation</router-link>
       </li>
       <li><div class="pipe">|</div></li>
       <li>
