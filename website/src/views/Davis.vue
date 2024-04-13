@@ -2,9 +2,9 @@
     <div class="davis">
         <div class="body">
             <iframe src="https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19137?noui=true&page_embed=true"
-                width="100%" height="400px"></iframe>
+                width="100%" height="350px"></iframe>
 
-            <div v-if="arrivals.length" class="funtable-width">
+            <div v-if="arrivals.length" class="table-div">
                 <table class="fun-table">
                     <thead>
                         <tr>
@@ -160,7 +160,8 @@ export default {
 
 <style>
 .body {
-    width: 70%;
+    width: 100%;
+    height: 100vh;
     font-size: large;
     padding: 10px;
     margin: auto;
@@ -192,6 +193,12 @@ th {
 }
 </style>
 <style scoped>
+.iframe {
+    align-self: center;
+}
+table-div {
+    width: 100%;
+}
 fun-table {
     width: 100%;
     border-collapse: collapse;

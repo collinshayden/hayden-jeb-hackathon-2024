@@ -1,6 +1,7 @@
 <template>
   <h1>Burlington Transit</h1>
-  <nav class="nav">
+  <div style="">
+    <nav class="nav">
     <ul>
       <li><router-link to="/">Home</router-link></li>
       <li><div class="pipe">|</div></li>
@@ -17,6 +18,7 @@
       </li>
     </ul>
   </nav>
+  </div>
   <router-view />
 </template>
 
