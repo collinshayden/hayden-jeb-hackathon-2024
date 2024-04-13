@@ -232,7 +232,7 @@ export default {
   }
   
   .fun-table th {
-    background-color: #39506e;
+    background-color: #6285b3;
     color: black;
   }
   

@@ -227,7 +227,7 @@ td {
 }
 
 th {
-  background-color: #f2f2f2;
+    background-color: #6285b3;
 }
 
 .fade-in {
@@ -284,7 +284,7 @@ fun-table {
 }
 
 .fun-table th {
-  background-color: #39506e;
+    background-color: #6285b3;
   color: black;
 }
 
