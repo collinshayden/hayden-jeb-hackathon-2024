@@ -1,53 +1,53 @@
 <template>
-  <div class="davis">
+  <div class="Innovation">
       <div class="iframe-container">
         <iframe :src="currentMapUrl" width="100%" height="400px"></iframe>
       </div>
-    <div v-if="arrivals.length" class="funtable-width">
-      <table class="fun-table">
-        <thead>
-          <tr>
-            <th>Stop Name</th>
-            <th>Route Name</th>
-            <th>Arrival Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="stop in arrivals">
-            <td>{{ stop.stop_title }}</td>
-            <td>
-              <ul>
-                <li
-                  v-for="time in stop.data"
-                  :key="time.unixTime"
-                  style="list-style-type: none"
-                >
-                  {{ route_names[time.route_id] }}
-                </li>
-              </ul>
-            </td>
-            <td>
-              <ul>
-                <li
-                  v-for="time in stop.data"
-                  :key="time.unixTime"
-                  style="list-style-type: none"
-                >
-                  {{ time.formattedTime }}
-                </li>
-              </ul>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div v-if="arrivals.length" class="funtable-width">
+        <table class="fun-table">
+          <thead>
+            <tr>
+              <th>Stop Name</th>
+              <th>Route Name</th>
+              <th>Arrival Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="stop in arrivals">
+              <td>{{ stop.stop_title }}</td>
+              <td>
+                <ul>
+                  <li
+                    v-for="time in stop.data"
+                    :key="time.unixTime"
+                    style="list-style-type: none"
+                  >
+                    {{ route_names[time.route_id] }}
+                  </li>
+                </ul>
+              </td>
+              <td>
+                <ul>
+                  <li
+                    v-for="time in stop.data"
+                    :key="time.unixTime"
+                    style="list-style-type: none"
+                  >
+                    {{ time.formattedTime }}
+                  </li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div v-else>Loading...</div>
     </div>
-    <div v-else>Loading...</div>
-  </div>
 </template>
 
 <script>
 export default {
-  name: "davis",
+  name: "innovation",
   data() {
     return {
       arrivals: [],
@@ -108,15 +108,11 @@ export default {
         19145: "11-Airport",
       },
       mapUrls: [
-        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19145?noui=true&page_embed=true", //11 - airport
-        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19137?noui=true&page_embed=true", //1-williston // good transfer
-        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19139?noui=true&page_embed=true", //2-essex
-        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/3164?noui=true&page_embed=true", //46-The 116 Commuter
-        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/3165?noui=true&page_embed=true", //56-Milton Commuter
-        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/3167?noui=true&page_embed=true", //86-Montpelier LINK Express
-        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/3163?noui=true&page_embed=true", //36-Jeffersonville Commuter
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19145?noui=true&page_embed=true",
 
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19137?noui=true&page_embed=true",
         // Add more map URLs here
+        //11, 8, 2, 36, 46, 56, 86, 1
       ],
       currentIndex: 0,
       nextIndex: 1,
@@ -129,23 +125,34 @@ export default {
     this.currentMapUrl = this.mapUrls[this.currentIndex];
     this.rotateMaps();
     // Fetch arrival times
-    fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805490")
+    fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805655")
       .then((response) => response.json())
       .then((data) => {
         if (data.status === "success") {
           this.arrivals.push({
-            stop_title: "UHeights Towards Williston",
+            stop_title: "UVM Waterman Building",
             data: data.data,
           });
         }
       })
       .catch((error) => console.error("Error fetching arrival times:", error));
-    fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805531")
+    fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805488")
       .then((response) => response.json())
       .then((data) => {
         if (data.status === "success") {
           this.arrivals.push({
-            stop_title: "UHeights Towards Downtown",
+            stop_title: "Main St. at S. Prospect St. Towards S. Burlington",
+            data: data.data,
+          });
+        }
+      })
+      .catch((error) => console.error("Error fetching arrival times:", error));
+    fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805532")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "success") {
+          this.arrivals.push({
+            stop_title: "Main St. at S. Prospect St. Towards Downtown",
             data: data.data,
           });
         }
@@ -157,17 +164,6 @@ export default {
         if (data.status === "success") {
           this.arrivals.push({
             stop_title: "UVM Medical Center",
-            data: data.data,
-          });
-        }
-      })
-      .catch((error) => console.error("Error fetching arrival times:", error));
-    fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805655")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.status === "success") {
-          this.arrivals.push({
-            stop_title: "UVM Waterman Building",
             data: data.data,
           });
         }
@@ -194,7 +190,6 @@ export default {
   },
 };
 </script>
-
 
 <style>
 .body {
