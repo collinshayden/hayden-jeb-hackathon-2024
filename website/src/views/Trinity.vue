@@ -1,0 +1,33 @@
+<template>
+    <div class="davis">
+      <div class="body">
+        
+      </div>
+    </div>
+  </template>
+  
+  <script>
+  export default {
+    name: "trinity",
+    components: {},
+  };
+  </script>
+  
+  <style>
+  .body {
+    width: 70%;
+    font-size: large;
+    padding: 10px;
+    margin: auto;
+    text-align: left;
+  }
+  
+  html {
+    background-color: #b0cee8;
+  }
+  p {
+    font-size: 1.15em;
+    text-indent: 2em;
+  }
+  </style>
+  
