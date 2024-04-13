@@ -7,11 +7,6 @@ import NotFound from '../views/NotFound.vue'
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: Home
-  },
-  {
     path: '/davis',
     name: 'Davis',
     component: Davis,

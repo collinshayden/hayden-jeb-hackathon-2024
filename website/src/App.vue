@@ -3,8 +3,6 @@
   <div style="">
     <nav class="nav">
     <ul>
-      <li><router-link to="/">Home</router-link></li>
-      <li><div class="pipe">|</div></li>
       <li>
         <router-link :to="{ name: 'Davis' }">Davis</router-link>
       </li>
