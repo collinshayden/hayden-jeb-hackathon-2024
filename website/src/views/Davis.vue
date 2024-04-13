@@ -2,59 +2,48 @@
   <div class="davis">
     <div class="body">
       <div class="iframe-container">
-        <iframe
-          :src="currentMapUrl"
-          width="100%"
-          height="400px"
-          v-show="currentIframe === 'iframe1'"
-        ></iframe>
-        <iframe
-          :src="nextMapUrl"
-          width="100%"
-          height="400px"
-          v-show="currentIframe === 'iframe2'"
-        ></iframe>
+        <iframe :src="currentMapUrl" width="100%" height="400px"></iframe>
       </div>
-      <div v-if="arrivals.length" class="funtable-width">
-        <table class="fun-table">
-          <thead>
-            <tr>
-              <th>Stop Name</th>
-              <th>Route Name</th>
-              <th>Arrival Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="stop in arrivals">
-              <td>{{ stop.stop_title }}</td>
-              <td>
-                <ul>
-                  <li
-                    v-for="time in stop.data"
-                    :key="time.unixTime"
-                    style="list-style-type: none"
-                  >
-                    {{ route_names[time.route_id] }}
-                  </li>
-                </ul>
-              </td>
-              <td>
-                <ul>
-                  <li
-                    v-for="time in stop.data"
-                    :key="time.unixTime"
-                    style="list-style-type: none"
-                  >
-                    {{ time.formattedTime }}
-                  </li>
-                </ul>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div v-else>Loading...</div>
     </div>
+    <div v-if="arrivals.length" class="funtable-width">
+      <table class="fun-table">
+        <thead>
+          <tr>
+            <th>Stop Name</th>
+            <th>Route Name</th>
+            <th>Arrival Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="stop in arrivals">
+            <td>{{ stop.stop_title }}</td>
+            <td>
+              <ul>
+                <li
+                  v-for="time in stop.data"
+                  :key="time.unixTime"
+                  style="list-style-type: none"
+                >
+                  {{ route_names[time.route_id] }}
+                </li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li
+                  v-for="time in stop.data"
+                  :key="time.unixTime"
+                  style="list-style-type: none"
+                >
+                  {{ time.formattedTime }}
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else>Loading...</div>
   </div>
 </template>
 
@@ -121,21 +110,25 @@ export default {
         19145: "11-Airport",
       },
       mapUrls: [
-        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19145?noui=true&page_embed=true",
-        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19137?noui=true&page_embed=true",
-        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19139?noui=true&page_embed=true",
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19145?noui=true&page_embed=true", //11 - airport
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19137?noui=true&page_embed=true", //1-williston // good transfer
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19139?noui=true&page_embed=true", //2-essex
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/3164?noui=true&page_embed=true", //46-The 116 Commuter
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/3165?noui=true&page_embed=true", //56-Milton Commuter
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/3167?noui=true&page_embed=true", //86-Montpelier LINK Express
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/3163?noui=true&page_embed=true", //36-Jeffersonville Commuter
+
         // Add more map URLs here
       ],
       currentIndex: 0,
       nextIndex: 1,
-      currentIframe: "iframe1",
       currentMapUrl: "",
       nextMapUrl: "",
+      lastSwapTime: Date.now(),
     };
   },
   created() {
     this.currentMapUrl = this.mapUrls[this.currentIndex];
-    this.nextMapUrl = this.mapUrls[this.nextIndex];
     this.rotateMaps();
     // Fetch arrival times
     fetch("/gtfsmap-realtime/feed/ccta-vt-us/arrivals?stopCode=805490")
@@ -186,22 +179,19 @@ export default {
   methods: {
     rotateMaps() {
       setInterval(() => {
-        // Prepare the next iframe
-        this.nextIndex = (this.nextIndex + 1) % this.mapUrls.length;
-        this.nextMapUrl = this.mapUrls[this.nextIndex];
-
-        // Wait 5 seconds before switching
-        setTimeout(() => {
-          // Swap the iframes
-          this.currentIframe =
-            this.currentIframe === "iframe1" ? "iframe2" : "iframe1";
-          // Update the current and next indices
-          this.currentIndex = this.nextIndex;
+        let now = Date.now();
+        if (now - this.lastSwapTime > 30000) {
+          // Less than 30 seconds have passed since the last swap, so return early
+          // Prepare the next map URL
+          console.log(this.arrivals);
           this.nextIndex = (this.nextIndex + 1) % this.mapUrls.length;
+          this.nextMapUrl = this.mapUrls[this.nextIndex];
+
           // Update the current map URL
           this.currentMapUrl = this.nextMapUrl;
-        }, 7000); // 5 seconds delay
-      }, 15000); // Rotate every 30 seconds
+          this.lastSwapTime = now;
+        }
+      }, 3000); // check if it can refresh
     },
   },
 };
@@ -245,23 +235,23 @@ th {
 }
 
 .iframe-container {
- position: relative;
- width: 100%;
- height: 400px;
- overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 400px;
+  overflow: hidden;
 }
 
 .iframe-container iframe {
- position: absolute;
- top: 0;
- left: 0;
- width: 100%;
- height: 100%;
- transition: opacity 1s ease-in-out;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: opacity 1s ease-in-out;
 }
 
 .iframe-container iframe.show {
- opacity: 1;
+  opacity: 1;
 }
 
 @keyframes fadeIn {
