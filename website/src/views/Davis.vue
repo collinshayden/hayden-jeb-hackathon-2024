@@ -1,8 +1,8 @@
 <template>
   <div class="davis">
-      <div class="iframe-container">
-        <iframe :src="currentMapUrl" width="100%" height="400px"></iframe>
-      </div>
+    <div class="iframe-container">
+      <iframe :src="currentMapUrl" width="100%" height="400px"></iframe>
+    </div>
     <div v-if="arrivals.length" class="funtable-width">
       <table class="fun-table">
         <thead>
@@ -178,7 +178,7 @@ export default {
     rotateMaps() {
       setInterval(() => {
         let now = Date.now();
-        if (now - this.lastSwapTime > 10000) {
+        if (now - this.lastSwapTime > 35000) {
           // Less than 30 seconds have passed since the last swap, so return early
           // Prepare the next map URL
           console.log(this.arrivals);
@@ -195,19 +195,9 @@ export default {
 };
 </script>
 
-
 <style>
-.body {
-  width: 100%;
-  height: 100vh;
-  font-size: large;
-  padding: 10px;
-  margin: auto;
-  text-align: left;
-}
-
 html {
-  background-color: #323f4b;
+  background-color: #315474;
 }
 
 p {
@@ -227,7 +217,7 @@ td {
 }
 
 th {
-    background-color: #6285b3;
+  background-color: #6285b3;
 }
 
 .fade-in {
@@ -262,8 +252,7 @@ th {
     opacity: 1;
   }
 }
-</style>
-<style scoped>
+
 .iframe {
   align-self: center;
 }
@@ -284,7 +273,7 @@ fun-table {
 }
 
 .fun-table th {
-    background-color: #6285b3;
+  background-color: #6285b3;
   color: black;
 }
 

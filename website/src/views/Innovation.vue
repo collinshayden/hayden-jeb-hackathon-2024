@@ -1,48 +1,48 @@
 <template>
   <div class="Innovation">
-      <div class="iframe-container">
-        <iframe :src="currentMapUrl" width="100%" height="400px"></iframe>
-      </div>
-      <div v-if="arrivals.length" class="funtable-width">
-        <table class="fun-table">
-          <thead>
-            <tr>
-              <th>Stop Name</th>
-              <th>Route Name</th>
-              <th>Arrival Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="stop in arrivals">
-              <td>{{ stop.stop_title }}</td>
-              <td>
-                <ul>
-                  <li
-                    v-for="time in stop.data"
-                    :key="time.unixTime"
-                    style="list-style-type: none"
-                  >
-                    {{ route_names[time.route_id] }}
-                  </li>
-                </ul>
-              </td>
-              <td>
-                <ul>
-                  <li
-                    v-for="time in stop.data"
-                    :key="time.unixTime"
-                    style="list-style-type: none"
-                  >
-                    {{ time.formattedTime }}
-                  </li>
-                </ul>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div v-else>Loading...</div>
+    <div class="iframe-container">
+      <iframe :src="currentMapUrl" width="100%" height="400px"></iframe>
     </div>
+    <div v-if="arrivals.length" class="funtable-width">
+      <table class="fun-table">
+        <thead>
+          <tr>
+            <th>Stop Name</th>
+            <th>Route Name</th>
+            <th>Arrival Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="stop in arrivals">
+            <td>{{ stop.stop_title }}</td>
+            <td>
+              <ul>
+                <li
+                  v-for="time in stop.data"
+                  :key="time.unixTime"
+                  style="list-style-type: none"
+                >
+                  {{ route_names[time.route_id] }}
+                </li>
+              </ul>
+            </td>
+            <td>
+              <ul>
+                <li
+                  v-for="time in stop.data"
+                  :key="time.unixTime"
+                  style="list-style-type: none"
+                >
+                  {{ time.formattedTime }}
+                </li>
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-else>Loading...</div>
+  </div>
 </template>
 
 <script>
@@ -108,11 +108,10 @@ export default {
         19145: "11-Airport",
       },
       mapUrls: [
-        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19145?noui=true&page_embed=true",
-
-        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19137?noui=true&page_embed=true",
-        // Add more map URLs here
-        //11, 8, 2, 36, 46, 56, 86, 1
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19145?noui=true&page_embed=true", // 11-Airport
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19137?noui=true&page_embed=true", // 1-Williston
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19139?noui=true&page_embed=true", //2-essex
+        "https://maps.trilliumtransit.com/map/feed/ccta-vt-us/routes/19143?noui=true&page_embed=true", //8-City Loop
       ],
       currentIndex: 0,
       nextIndex: 1,
@@ -174,7 +173,7 @@ export default {
     rotateMaps() {
       setInterval(() => {
         let now = Date.now();
-        if (now - this.lastSwapTime > 10000) {
+        if (now - this.lastSwapTime > 35000) {
           // Less than 30 seconds have passed since the last swap, so return early
           // Prepare the next map URL
           console.log(this.arrivals);
@@ -190,104 +189,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.body {
-  width: 100%;
-  height: 100vh;
-  font-size: large;
-  padding: 10px;
-  margin: auto;
-  text-align: left;
-}
-
-html {
-  background-color: #323f4b;
-}
-
-p {
-  font-size: 1.15em;
-  text-indent: 2em;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th,
-td {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
-.fade-in {
-  animation: fadeIn 1s ease-in-out;
-}
-
-.iframe-container {
-  position: relative;
-  width: 100%;
-  height: 400px;
-  overflow: hidden;
-}
-
-.iframe-container iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transition: opacity 1s ease-in-out;
-}
-
-.iframe-container iframe.show {
-  opacity: 1;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-</style>
-<style scoped>
-.iframe {
-  align-self: center;
-}
-table-div {
-  width: 100%;
-}
-fun-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-family: Arial, sans-serif;
-}
-
-.fun-table th,
-.fun-table td {
-  border: 1px solid #ddd;
-  padding: 4px;
-  text-align: left;
-}
-
-.fun-table th {
-  background-color: #6285b3;
-  color: black;
-}
-
-.fun-table tr:nth-child(even) {
-  background-color: #4c606a;
-}
-
-.fun-table tr:hover {
-  background-color: #ddd;
-}
-</style>
