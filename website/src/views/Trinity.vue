@@ -175,7 +175,7 @@ export default {
     rotateMaps() {
       setInterval(() => {
         let now = Date.now();
-        if (now - this.lastSwapTime > 3500) {
+        if (now - this.lastSwapTime > 35000) {
           // Less than 30 seconds have passed since the last swap, so return early
           // Prepare the next map URL
           console.log(this.arrivals);
